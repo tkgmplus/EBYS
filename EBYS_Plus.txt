@@ -1,22 +1,4 @@
-
-//***********************************************************************************************
-//***********************************************************************************************
-// ==UserScript==
-// @name         EBYS Plus
-// @namespace    http://tampermonkey.net/
-// @version      V.25_7
-// @description  Ebys Plus
-// @author       Sen
-// @match        https://ebys.tkgm.gov.tr/edys-web/sistemeGiris.xhtml*
-// @match        https://ebys.tkgm.gov.tr/edys-web/mainInbox.xhtml*
-// @grant        none
-// ==/UserScript==
-//***********************************************************************************************
-//***********************************************************************************************
-
-
-
-
+								V.25.73
 //###############################################################################################
 // ********************************* Karanlık Ekran Düzelt BAŞ **********************************
 //###############################################################################################
@@ -67,7 +49,7 @@ function karanlikDuzeltButonuEkle() {
 
     // Hover efekti (buton genişliyor, yazı beliriyor)
     btn.onmouseover = function () {
-        btn.style.width = "190px";
+        btn.style.width = "196px";
         btn.style.background= "linear-gradient(135deg, #007AFF, #005BBB)";
         btn.innerHTML = "🌙 &nbsp; Karanlık Modu Düzelt";
         btn.style.justifyContent = "flex-start";
@@ -339,8 +321,19 @@ function showNotification(message, type = "success") {
     }, 3000);
 }
 
-// 📌 Giriş kutusu (Şifre doğrulama ve güncelleme için)
+
+
+
+
+
+
+
+
 function acDialog(baslik, placeholder, mevcutDeger, callback) {
+    // 📌 **Tüm arka plan inputlarını devre dışı bırak**
+    let allInputs = document.querySelectorAll("input, textarea, select");
+    allInputs.forEach(input => input.disabled = true);
+
     let modalBackground = document.createElement("div");
     modalBackground.style = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -362,20 +355,20 @@ function acDialog(baslik, placeholder, mevcutDeger, callback) {
 
     let input = document.createElement("input");
     input.type = placeholder.toLowerCase().includes("*") ? "password" : "text";
-    input.autocomplete = "new-password"; // Tarayıcının otomatik doldurmasını engeller
-    input.autocorrect = "off";
-    input.autocapitalize = "off";
-    input.spellcheck = false;
     input.placeholder = placeholder;
     input.value = mevcutDeger || "";
+
+    // 📌 **Tarayıcının otomatik doldurmasını tamamen kapat**
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("autocorrect", "off");
+    input.setAttribute("autocapitalize", "off");
+    input.setAttribute("spellcheck", "false");
+
     input.style = `
         padding: 8px; width: 90%; margin-bottom: 10px;
         border: 1px solid #ccc; border-radius: 5px; text-align: center;
     `;
     modal.appendChild(input);
-
-
-
 
     let buttonContainer = document.createElement("div");
     buttonContainer.style = "display: flex; justify-content: space-between; margin-top: 10px;";
@@ -390,6 +383,10 @@ function acDialog(baslik, placeholder, mevcutDeger, callback) {
     confirmButton.onclick = function () {
         if (input.value.trim() !== "") {
             document.body.removeChild(modalBackground);
+
+            // 📌 **Arka plan inputlarını tekrar aktif et**
+            allInputs.forEach(input => input.disabled = false);
+
             callback(input.value.trim());
         } else {
             showNotification("Boş bırakılamaz!", "error");
@@ -405,6 +402,10 @@ function acDialog(baslik, placeholder, mevcutDeger, callback) {
     `;
     cancelButton.onclick = function () {
         document.body.removeChild(modalBackground);
+
+        // 📌 **Arka plan inputlarını tekrar aktif et**
+        allInputs.forEach(input => input.disabled = false);
+
         showNotification("İşlem iptal edildi.", "error");
     };
 
@@ -413,7 +414,18 @@ function acDialog(baslik, placeholder, mevcutDeger, callback) {
     modal.appendChild(buttonContainer);
     modalBackground.appendChild(modal);
     document.body.appendChild(modalBackground);
+
+    // 📌 **Input otomatik seçilsin ve odaklansın**
+    setTimeout(() => {
+        input.focus();
+        input.select();
+    }, 10);
 }
+
+
+
+
+
 
 // 📌 Sticky Menü oluştur
 let menuContainer = document.createElement("div");
@@ -488,18 +500,18 @@ updateAllBtn.onclick = function() {
             acDialog("Yeni Şifreyi Girin", "Şifre", sifre, (newSifre) => {
                 setValue("sifre", newSifre);
                 showNotification("Şifre güncellendi!");
-                
+
 
 
                 acDialog("Yeni e_imza Girin", "e_imza", e_imza, (neweimza) => {
                     setValue("e_imza", neweimza);
                     showNotification("Şifre güncellendi!");
-                    
+
 
                 acDialog("Yeni kep_parola Girin", "kep_parola", kep_parola, (newkepparola) => {
                     setValue("kep_parola", newkepparola);
                     showNotification("Şifre güncellendi!");
-                    
+
 
 
                 acDialog("Yeni kep_sifre Girin", "kep_sifre", kep_sifre, (newkepsifre) => {
@@ -515,6 +527,22 @@ updateAllBtn.onclick = function() {
     });
 
 };
+
+let updateCheckBtn = document.createElement("button");
+updateCheckBtn.innerText = "🔄 Güncellemeleri Kontrol Et";
+updateCheckBtn.style = `
+    display: block; padding: 7px; width: 90%;
+    margin: 5px auto; border: none; cursor: pointer;
+    border-radius: 5px; background: #007bff; color: white;
+`;
+
+updateCheckBtn.onclick = function() {
+    checkForUpdate(true); // Güncelleme kontrol fonksiyonunu çalıştır
+};
+
+// 📌 Sticky menüye butonu ekle
+menuContainer.appendChild(updateCheckBtn);
+
 
 menuContainer.appendChild(updateAllBtn);
 document.body.appendChild(menuContainer);
@@ -654,8 +682,6 @@ document.body.appendChild(toggleButton);
 //###############################################################################################
 // ************************ Otomatik Giriş - KEP Giriş - E-İmza SON *****************************
 //###############################################################################################
-
-
 
 
 
