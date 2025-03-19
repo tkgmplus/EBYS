@@ -530,6 +530,22 @@ updateAllBtn.onclick = function() {
 
 };
 
+let updateCheckBtn = document.createElement("button");
+updateCheckBtn.innerText = "🔄 Güncellemeleri Kontrol Et";
+updateCheckBtn.style = `
+    display: block; padding: 7px; width: 90%;
+    margin: 5px auto; border: none; cursor: pointer;
+    border-radius: 5px; background: #007bff; color: white;
+`;
+
+updateCheckBtn.onclick = function() {
+    checkForUpdate(true); // Güncelleme kontrol fonksiyonunu çalıştır
+};
+
+// 📌 Sticky menüye butonu ekle
+menuContainer.appendChild(updateCheckBtn);
+
+
 menuContainer.appendChild(updateAllBtn);
 document.body.appendChild(menuContainer);
 
