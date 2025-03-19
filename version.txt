@@ -1,4 +1,4 @@
-25.8
+2572
 [Eski Özellikler]
 - Performans iyileştirildi.
 - Kullanıcı arayüzü güncellendi.
