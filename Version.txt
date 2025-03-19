@@ -1,0 +1,12 @@
+25.73
+[Eski Özellikler]
+- Performans iyileştirildi.
+- Kullanıcı arayüzü güncellendi.
+- Performans iyileştirildi.
+- Kullanıcı arayüzü güncellendi.
+
+[Yeni Gelen Özellikler]
+- Güncelleme bildirim sistemi eklendi.
+- Otomatik kod güncelleme desteği.
+- Güncelleme bildirim sistemi eklendi.
+- Otomatik kod güncelleme desteği.
