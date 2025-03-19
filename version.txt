@@ -1,9 +1,8 @@
-version:25.72
-changes:
-- Performans iyileştirmeleri yapıldı.
-- Görsel düzenlemeler geliştirildi.
-- Güncelleme kontrolü hızlandırıldı.
-features:
-- Manuel güncelleme butonu eklendi.
-- Otomatik güncelleme bildirimleri güncellendi.
-- Tampermonkey için yeni komutlar eklendi.
+25.72
+[Eski Özellikler]
+- Performans iyileştirildi.
+- Kullanıcı arayüzü güncellendi.
+
+[Yeni Gelen Özellikler]
+- Güncelleme bildirim sistemi eklendi.
+- Otomatik kod güncelleme desteği.
