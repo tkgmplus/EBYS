@@ -1,4 +1,4 @@
-2572
+2582
 [Eski Özellikler]
 - Performans iyileştirildi.
 - Kullanıcı arayüzü güncellendi.
