@@ -1,0 +1,718 @@
+
+
+//								V.25.73
+//###############################################################################################
+// ********************************* Karanlık Ekran Düzelt BAŞ **********************************
+//###############################################################################################
+
+
+
+function sayfayiDinle() {
+    let observer = new MutationObserver(() => {
+        let panel = document.getElementById("mainPreviewForm:onizlemePanel");
+        let btn = document.getElementById("karanlik-duzelt-btn");
+
+        // Eğer ID varsa ve buton yoksa, butonu ekle
+        if (panel && !btn) {
+            karanlikDuzeltButonuEkle();
+        }
+
+        // Eğer ID sayfadan kaybolursa butonu da kaldır
+        if (!panel && btn) {
+            btn.remove();
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Sayfa açıldığında ilgili öğe zaten varsa butonu ekle
+    if (document.getElementById("mainPreviewForm:onizlemePanel")) {
+        karanlikDuzeltButonuEkle();
+    }
+}
+
+function karanlikDuzeltButonuEkle() {
+    let btn = document.createElement("button");
+    btn.id = "karanlik-duzelt-btn";
+    btn.innerHTML = "<span style='font-size: 25px; margin-bottom:4px;'>🌙</span>";// Başlangıçta sadece ikon görünsün
+    btn.style = `
+        width: 35px; height: 35px;
+        background: rgba(224, 236, 252, 0);
+        color: white; border: none; border-radius: 100%;
+        cursor: pointer; font-size: 14px;
+        z-index: 10000; margin:3px 12px 3px 12px;
+        transition: all 0.4s ease-in-out;
+        overflow: hidden; white-space: nowrap;
+        display: flex; align-items: center; justify-content: center;
+    `;
+
+
+    // background: linear-gradient(135deg, #007AFF, #005BBB);
+
+    // Hover efekti (buton genişliyor, yazı beliriyor)
+    btn.onmouseover = function () {
+        btn.style.width = "196px";
+        btn.style.background= "linear-gradient(135deg, #007AFF, #005BBB)";
+        btn.innerHTML = "🌙 &nbsp; Karanlık Modu Düzelt";
+        btn.style.justifyContent = "flex-start";
+        btn.style.paddingLeft = "15px";
+    };
+    btn.onmouseleave = function () {
+        btn.style.width = "35px";
+        btn.style.background="rgba(224, 236, 252, 0)";
+        btn.innerHTML = "<span style='font-size: 25px; margin-bottom:4px;'>🌙</span>";
+        btn.style.justifyContent = "center";
+        btn.style.paddingLeft = "0px";
+    };
+
+    btn.onclick = function () {
+        showNotification("🔄 Karanlık ekran sorunu çözülüyor...", "info");
+        setTimeout(() => {
+
+    // Service Worker'ları temizle (Eğer varsa)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            for (let registration of registrations) {
+                registration.unregister();
+            }
+        });
+    }
+
+    // Cache Storage'ı temizle
+    if ('caches' in window) {
+        caches.keys().then(names => {
+            for (let name of names) {
+                caches.delete(name);
+            }
+        });
+    }
+
+    // Sayfayı zorunlu olarak yenile (Gerçek Ctrl + F5 etkisi)
+    window.location.replace(window.location.pathname + "?nocache=" + new Date().getTime());
+
+
+        }, 1500);
+    };
+
+    // 📌 İlk buton menüsünü bul ve en öne ekle (Body'ye eklemiyor!)
+    let firstMenuButton = document.querySelector(".buttonMenuContainerDefault");
+    if (firstMenuButton) {
+        firstMenuButton.parentNode.insertBefore(btn, firstMenuButton);
+    }
+}
+
+// 📌 Bildirim Sistemi
+function showNotification(message, type = "success") {
+    let notification = document.createElement("div");
+    notification.innerText = message;
+    notification.style = `
+        position: fixed; top: 15px; right: 15px;
+        background: ${type === "success" ? "#4CAF50" : type === "error" ? "#FF5733" : "#007AFF"};
+        color: white; padding: 12px 20px;
+        border-radius: 8px; font-size: 14px; font-weight: bold;
+        z-index: 10001; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        opacity: 1; transition: opacity 0.5s ease-in-out;
+    `;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        setTimeout(() => document.body.removeChild(notification), 500);
+    }, 3000);
+}
+
+// **Sayfa yüklenince butonu kontrol et ve ekle**
+sayfayiDinle();
+
+
+//###############################################################################################
+// ********************************** Karanlık Ekran Düzelt SON**********************************
+//###############################################################################################
+
+
+
+
+
+//###############################################################################################
+// ************************************ Evrak Ekle İsim BAŞ *************************************
+//###############################################################################################
+
+
+(function() {
+    'use strict';
+
+    const labelID = "windowCevapEvrakForm:evrakEkTabView:dosyaAdi";      // Label ID
+    const textareaID = "windowCevapEvrakForm:evrakEkTabView:dosyaAciklama"; // Textarea ID
+
+    let textarea = document.getElementById(textareaID);
+    let label = document.getElementById(labelID);
+
+    // Kullanıcının textarea'ya müdahale edip etmediğini kontrol etmek için bayrak
+    let userModified = false;
+
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            userModified = true; // Kullanıcı bir şey yazarsa artık otomatik güncelleme yapılmaz
+        });
+    }
+
+    function updateTextarea() {
+        let label = document.getElementById(labelID);
+        let textarea = document.getElementById(textareaID);
+
+        if (label && textarea && !userModified) {
+            let labelText = label.textContent.trim();
+            if (labelText && textarea.value.trim() === "") {
+                textarea.value = labelText;
+            }
+        }
+    }
+
+    // DOM değişikliklerini izleyen MutationObserver kullanarak sayfadaki değişiklikleri takip et
+    const observer = new MutationObserver(updateTextarea);
+    const config = { childList: true, subtree: true, characterData: true };
+
+    let labelElement = document.getElementById(labelID);
+    if (labelElement) {
+        observer.observe(labelElement, config);
+    }
+
+    // Belirli aralıklarla güncelleme yap
+    setInterval(updateTextarea, 1000);
+})();
+
+//###############################################################################################
+// ************************************ Evrak Ekle İsim SON *************************************
+//###############################################################################################
+
+
+
+
+//###############################################################################################
+// ******************************* Evrak Ekle İsim Taslak BAŞ ***********************************
+//###############################################################################################
+(function() {
+    'use strict';
+
+    const labelID = "inboxItemInfoForm:evrakEkTabView:dosyaAdi";      // Label ID
+    const textareaID = "inboxItemInfoForm:evrakEkTabView:dosyaAciklama"; // Textarea ID
+
+    let textarea = document.getElementById(textareaID);
+    let label = document.getElementById(labelID);
+
+    // Kullanıcının textarea'ya müdahale edip etmediğini kontrol etmek için bayrak
+    let userModified = false;
+
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            userModified = true; // Kullanıcı bir şey yazarsa artık otomatik güncelleme yapılmaz
+        });
+    }
+
+    function updateTextarea() {
+        let label = document.getElementById(labelID);
+        let textarea = document.getElementById(textareaID);
+
+        if (label && textarea && !userModified) {
+            let labelText = label.textContent.trim();
+            if (labelText && textarea.value.trim() === "") {
+                textarea.value = labelText;
+            }
+        }
+    }
+
+    // DOM değişikliklerini izleyen MutationObserver kullanarak sayfadaki değişiklikleri takip et
+    const observer = new MutationObserver(updateTextarea);
+    const config = { childList: true, subtree: true, characterData: true };
+
+    let labelElement = document.getElementById(labelID);
+    if (labelElement) {
+        observer.observe(labelElement, config);
+    }
+
+    // Belirli aralıklarla güncelleme yap
+    setInterval(updateTextarea, 1000);
+})();
+
+//###############################################################################################
+// ************************************ Evrak Ekle İsim Son *************************************
+//###############################################################################################
+
+
+
+
+
+
+
+//###############################################################################################
+// ************************ Otomatik Giriş - KEP Giriş - E-İmza BAŞLA **************************
+//###############################################################################################
+
+(function() {
+    'use strict';
+
+    let isClicked = false;  // Kep Butonun tıklanma durumunu kontrol eden bayrak
+    let isClicked_g = false; // Giriş Butonun tıklanma durumunu kontrol eden bayrak
+
+
+
+
+
+
+
+
+      //****************************************************************************************
+     //****************************************   Sticky Menu BAŞ   **************************************
+    //******************************************************************************************
+
+
+    // 📌 localStorage ile veri saklama
+function getValue(key, defaultValue) {
+    return localStorage.getItem(key) || defaultValue;
+}
+
+function setValue(key, value) {
+    localStorage.setItem(key, value);
+}
+
+
+// 📌 Şifre güncelleme kontrolü
+window.onload = function () {
+    let sifreGuncellemeDurumu = getValue("sifreGuncellemeDurumu", "0");
+
+    if (sifreGuncellemeDurumu === "0") {
+        acDialog("Yeni Kullanıcı Adı Girin", "Kullanıcı Adı", "", (newKullaniciAdi) => {
+            setValue("kullanici_adi", newKullaniciAdi);
+            showNotification("Kullanıcı adı güncellendi!");
+
+            acDialog("Yeni Şifreyi Girin", "Şifre", "", (newSifre) => {
+                setValue("sifre", newSifre);
+                showNotification("Şifre güncellendi!");
+
+                acDialog("Yeni e-İmza PIN Girin", "e-İmza PIN", "", (newEimza) => {
+                    setValue("e_imza", newEimza);
+                    showNotification("e-İmza PIN güncellendi!");
+
+                    acDialog("Yeni KEP Parola Girin", "KEP Parola", "", (newKepParola) => {
+                        setValue("kep_parola", newKepParola);
+                        showNotification("KEP Parola güncellendi!");
+
+                        acDialog("Yeni KEP Şifre Girin", "KEP Şifre", "", (newKepSifre) => {
+                            setValue("kep_sifre", newKepSifre);
+                            showNotification("KEP Şifre güncellendi!");
+
+
+
+
+                            // **Tüm girişler tamamlandı, şimdi sifreGuncellemeDurumu = "1" yap**
+                            setValue("sifreGuncellemeDurumu", "1");
+
+                            // **Sayfayı yenileyerek yeni değerleri yükle**
+                            setTimeout(() => location.reload(), 2000);
+                        });
+                    });
+                });
+            });
+        });
+    }
+};
+
+
+
+
+// 📌 Kullanıcı bilgileri (Varsayılan değerler)
+let kullanici_adi = getValue("kullanici_adi", "A");
+let sifre = getValue("sifre", "A");
+let e_imza = getValue("e_imza", "");
+let kep_parola = getValue("kep_parola", "");
+let kep_sifre = getValue("kep_sifre", "");
+
+// 📌 Bildirim Sistemi
+function showNotification(message, type = "success") {
+    let notification = document.createElement("div");
+    notification.innerText = message;
+    notification.style = `
+        position: fixed; top: 10px; right: 10px; padding: 10px 20px;
+        border-radius: 5px; font-size: 14px; font-weight: bold;
+        background: ${type === "success" ? "#4CAF50" : "#FF5733"};
+        color: white; z-index: 10000; transition: opacity 0.5s;
+    `;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        setTimeout(() => document.body.removeChild(notification), 500);
+    }, 3000);
+}
+
+
+
+
+
+
+
+
+
+function acDialog(baslik, placeholder, mevcutDeger, callback) {
+    // 📌 **Tüm arka plan inputlarını devre dışı bırak**
+    let allInputs = document.querySelectorAll("input, textarea, select");
+    allInputs.forEach(input => input.disabled = true);
+
+    let modalBackground = document.createElement("div");
+    modalBackground.style = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.5); z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+    `;
+
+    let modal = document.createElement("div");
+    modal.style = `
+        background: white; padding: 20px; border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); text-align: center;
+        width: 300px;
+    `;
+
+    let title = document.createElement("div");
+    title.innerText = baslik;
+    title.style = "font-size: 16px; font-weight: bold; margin-bottom: 10px;";
+    modal.appendChild(title);
+
+    let input = document.createElement("input");
+    input.type = placeholder.toLowerCase().includes("*") ? "password" : "text";
+    input.placeholder = placeholder;
+    input.value = mevcutDeger || "";
+
+    // 📌 **Tarayıcının otomatik doldurmasını tamamen kapat**
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("autocorrect", "off");
+    input.setAttribute("autocapitalize", "off");
+    input.setAttribute("spellcheck", "false");
+
+    input.style = `
+        padding: 8px; width: 90%; margin-bottom: 10px;
+        border: 1px solid #ccc; border-radius: 5px; text-align: center;
+    `;
+    modal.appendChild(input);
+
+    let buttonContainer = document.createElement("div");
+    buttonContainer.style = "display: flex; justify-content: space-between; margin-top: 10px;";
+
+    let confirmButton = document.createElement("button");
+    confirmButton.innerText = "Onayla";
+    confirmButton.style = `
+        padding: 8px 15px; background: #4CAF50; color: white;
+        border: none; border-radius: 5px; cursor: pointer;
+        width: 45%;
+    `;
+    confirmButton.onclick = function () {
+        if (input.value.trim() !== "") {
+            document.body.removeChild(modalBackground);
+
+            // 📌 **Arka plan inputlarını tekrar aktif et**
+            allInputs.forEach(input => input.disabled = false);
+
+            callback(input.value.trim());
+        } else {
+            showNotification("Boş bırakılamaz!", "error");
+        }
+    };
+
+    let cancelButton = document.createElement("button");
+    cancelButton.innerText = "Vazgeç";
+    cancelButton.style = `
+        padding: 8px 15px; background: #FF5733; color: white;
+        border: none; border-radius: 5px; cursor: pointer;
+        width: 45%;
+    `;
+    cancelButton.onclick = function () {
+        document.body.removeChild(modalBackground);
+
+        // 📌 **Arka plan inputlarını tekrar aktif et**
+        allInputs.forEach(input => input.disabled = false);
+
+        showNotification("İşlem iptal edildi.", "error");
+    };
+
+    buttonContainer.appendChild(cancelButton);
+    buttonContainer.appendChild(confirmButton);
+    modal.appendChild(buttonContainer);
+    modalBackground.appendChild(modal);
+    document.body.appendChild(modalBackground);
+
+    // 📌 **Input otomatik seçilsin ve odaklansın**
+    setTimeout(() => {
+        input.focus();
+        input.select();
+    }, 10);
+}
+
+
+
+
+
+
+// 📌 Sticky Menü oluştur
+let menuContainer = document.createElement("div");
+menuContainer.id = "ebys-plus-menu";
+menuContainer.style = `
+    position: fixed; top: 5px; left: 5px;
+    background: rgba(0, 0, 0, 0.7); color: white;
+    padding: 15px; border-radius: 5px;
+    z-index: 9999; width: 210px; display: none;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+`;
+
+// Başlık
+let baslik = document.createElement("div");
+baslik.innerText = "⚙️ EBYS Plus";
+baslik.style = "font-weight: bold; text-align: center; font-size: 18px; margin-bottom: 10px;";
+menuContainer.appendChild(baslik);
+
+// 📌 Şifre doğrulama fonksiyonu
+function sifreDogrulama(callback) {
+    acDialog("Şifre Doğrulama", "* Ebys Şifre Doğrula *", "", (inputSifre) => {
+        if (inputSifre === sifre) {
+            callback();
+        } else {
+            showNotification("Hatalı şifre!", "error");
+        }
+    });
+}
+
+// 📌 Güncelleme butonlarına doğrulama ekleme
+function addButton(text, key, variable) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
+    btn.style = `
+        display: block; padding: 7px; width: 90%;
+        margin: 5px auto; border: none; cursor: pointer;
+        border-radius: 5px; background: #4CAF50; color: white;
+    `;
+
+    btn.onclick = function() {
+        sifreDogrulama(() => {
+            acDialog(`Yeni ${text}`, text, variable, (newValue) => {
+                setValue(key, newValue);
+                showNotification(`${text} güncellendi!`);
+                location.reload();
+            });
+        });
+    };
+    menuContainer.appendChild(btn);
+}
+
+addButton("Kullanıcı Adı Değiştir", "kullanici_adi", kullanici_adi);
+addButton("Şifreyi Değiştir", "sifre", sifre);
+addButton("E-İmza PIN Değiştir", "e_imza", e_imza);
+addButton("KEP Parola Değiştir", "kep_parola", kep_parola);
+addButton("KEP Şifre Değiştir", "kep_sifre", kep_sifre);
+
+let updateAllBtn = document.createElement("button");
+updateAllBtn.innerText = "🔒 Tüm Şifreleri Güncelle";
+updateAllBtn.style = `
+    display: block; padding: 7px; width: 90%;
+    margin: 10px auto; border: none; cursor: pointer;
+    border-radius: 5px; background: #FF5733; color: white;
+`;
+
+updateAllBtn.onclick = function() {
+    sifreDogrulama(() => {
+        acDialog("Yeni Kullanıcı Adı Girin", "Kullanıcı Adı", kullanici_adi, (newKullaniciAdi) => {
+            setValue("kullanici_adi", newKullaniciAdi);
+            showNotification("Kullanıcı adı güncellendi!");
+
+            acDialog("Yeni Şifreyi Girin", "Şifre", sifre, (newSifre) => {
+                setValue("sifre", newSifre);
+                showNotification("Şifre güncellendi!");
+
+
+
+                acDialog("Yeni e_imza Girin", "e_imza", e_imza, (neweimza) => {
+                    setValue("e_imza", neweimza);
+                    showNotification("Şifre güncellendi!");
+
+
+                acDialog("Yeni kep_parola Girin", "kep_parola", kep_parola, (newkepparola) => {
+                    setValue("kep_parola", newkepparola);
+                    showNotification("Şifre güncellendi!");
+
+
+
+                acDialog("Yeni kep_sifre Girin", "kep_sifre", kep_sifre, (newkepsifre) => {
+                    setValue("kep_sifre", newkepsifre);
+                    showNotification("Şifre güncellendi!");
+                    location.reload();
+
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+};
+
+let updateCheckBtn = document.createElement("button");
+updateCheckBtn.innerText = "🔄 Güncellemeleri Kontrol Et";
+updateCheckBtn.style = `
+    display: block; padding: 7px; width: 90%;
+    margin: 5px auto; border: none; cursor: pointer;
+    border-radius: 5px; background: #007bff; color: white;
+`;
+
+updateCheckBtn.onclick = function() {
+    checkForUpdate(true); // Güncelleme kontrol fonksiyonunu çalıştır
+};
+
+// 📌 Sticky menüye butonu ekle
+menuContainer.appendChild(updateCheckBtn);
+
+
+menuContainer.appendChild(updateAllBtn);
+document.body.appendChild(menuContainer);
+
+let toggleButton = document.createElement("button");
+toggleButton.innerText = "⚙️ EBYS Plus Menü";
+toggleButton.style = `
+    position: fixed; top: 4px; left: 248px;
+    z-index: 10000; padding: 6px 10px 8px 10px;
+    background: rgb(28, 120, 171); color: white;
+    border: none; border-radius: 5px; cursor: pointer;
+`;
+toggleButton.onclick = function() {
+    let menu = document.getElementById("ebys-plus-menu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+};
+document.body.appendChild(toggleButton);
+
+
+      //**************************************************************************************************
+     //****************************************   Sticky Menu SON   **************************************
+    //****************************************************************************************************
+
+
+
+
+     // Bu fonksiyon input alanını bulur ve değerini insansı şekilde ayarlar
+    function simulateTyping(inputElement, text) {
+        inputElement.focus();
+        inputElement.value = '';
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            let keydownEvent = new KeyboardEvent('keydown', { key: char, bubbles: true });
+            inputElement.dispatchEvent(keydownEvent);
+
+            inputElement.value += char;  // Şifreyi karakter karakter yaz
+            let keyupEvent = new KeyboardEvent('keyup', { key: char, bubbles: true });
+            inputElement.dispatchEvent(keyupEvent);
+        }
+
+        inputElement.dispatchEvent(new Event('input', { bubbles: true }));
+        inputElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+
+    // Fonksiyon Başlangıç
+    function setPasswordValue() {
+
+
+        // E-imza Başlangıç
+        const input_3 = document.getElementById('txtPinKod');
+        if (input_3 && input_3.value !== e_imza) {
+            simulateTyping(input_3, e_imza);
+        }
+        // E-imza Son
+
+
+
+
+        // Kep Kısmı Başlangıç
+        const input = document.getElementById('passwordParola');
+        if (input && input.value !== kep_parola) {
+            simulateTyping(input, kep_parola);
+        }
+
+        const input_2 = document.getElementById('passwordSifre');
+        if (input_2 && input_2.value !== kep_sifre) {
+            simulateTyping(input_2, kep_sifre);
+        }
+
+
+        // Giriş butonuna bir kere tıklayın ve sonra durun
+        if (!isClicked) {
+            const loginButton = document.querySelector('button[id="kepLogin2FormId:j_idt385"]');
+            if (loginButton) {
+                loginButton.click();
+                isClicked = true;  // Tıklama tamamlandığında bayrağı güncelle
+            }
+        }
+        // Kep Kısmı Son
+
+
+
+
+        //Ebys Giriş Başlangıç
+
+    // Eğer zaten giriş yapıldıysa script çalışmasın
+    if (document.querySelector('.logout') || document.body.innerText.includes('Hoşgeldiniz')) {
+        return;
+    }
+
+
+        // Kullanıcı adı ve şifreyi klavye simülasyonu ile doldurun
+        let usernameField = document.querySelector('input[name="parolaSertifikaAccordion:uForm:txtUKullaniciAdi"]');
+        simulateTyping(usernameField, kullanici_adi); // Kullanıcı adınızı yazın
+
+        let passwordField = document.querySelector('input[id="loginUSifre"]');
+        simulateTyping(passwordField, sifre); // Şifrenizi yazın
+
+
+
+        // Giriş butonuna bir kere tıklayın ve sonra durun
+        if (!isClicked_g) {
+            const loginButton_g =  document.querySelector('button[type="submit"]');
+            if (loginButton_g) {
+                loginButton_g.click();
+                isClicked_g = true;  // Tıklama tamamlandığında bayrağı güncelle
+            }
+        }
+
+
+
+        //Ebys Giriş Son
+
+
+
+    }
+// Fonksiyon Son
+
+
+
+
+
+    // Dinamik olarak sayfa yüklendikçe kontrol etmek için MutationObserver kullanıyoruz
+    const observer = new MutationObserver(() => {
+        setPasswordValue();
+    });
+
+    // Sayfa içeriğini izlemek için yapılandırma
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Başlangıçta hemen kontrol et
+    setPasswordValue();
+})();
+
+//###############################################################################################
+// ************************ Otomatik Giriş - KEP Giriş - E-İmza SON *****************************
+//###############################################################################################
+
+
+
+
+
+
+
+
+
+
