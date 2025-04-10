@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="tr">  
+<head>  <meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+<meta name="description" content="Takbis Plus, TAKBİS işlemlerinizde size hız, güvenlik ve kolaylık sağlar. Ücretsiz indirip hemen kullanmaya başlayın.">  
+<meta property="og:title" content="Takbis Plus | TAKBİS'de Akıllı Yardımcınız">  
+<meta property="og:description" content="Takbis çöktüğünde kurtarır, size zaman kazandırır ve güvenle çalışır.">  
+<title>Takbis Plus | TAKBİS'de Akıllı Yardımcınız</title>  
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>  
+    * {  
+        margin: 0;  
+        padding: 0;  
+        box-sizing: border-box;  
+    }  
+  
+    body {  
+        font-family: 'Poppins', sans-serif;  
+        background: #f5f7fa;  
+        color: #333;  
+        line-height: 1.6;  
+    }  
+  
+  
+	html {
+	  scroll-behavior: smooth;
+	}
+	  
+    .takbis-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+     background: linear-gradient(120deg, #1f5e3b, #3cb371);  
+      color: white;
+      padding: 20px 60px;
+      border-radius: 0px 0px 40px 40px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      font-family: 'Monotype Corsiva', sans-serif;
+	  
+    }
+
+    .takbis-header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .download-btn {
+      background-color: white;
+      color: #2e8b57;
+      border: none;
+      padding: 7px 30px;
+      font-size: 1.2rem;
+      border-radius: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+	  transform: translateY(-4px)
+	  
+    }
+
+    .download-btn:hover {
+      background-color: #e8eaf6;
+      transform: translateY(2px);
+    }
+
+
+
+  
+        header h1 {  
+            font-size: 3em;  
+            margin-bottom: 10px;  
+        }  
+  
+        header p {  
+            font-size: 1.2em;  
+            opacity: 0.9;  
+        }  
+  
+    section {  
+        max-width: 1100px;  
+        margin: 50px auto;  
+        padding: 0 20px;  
+    }  
+  
+    h2 {  
+        color: #2e8b57;  
+        margin-bottom: 20px;  
+        text-align: center;  
+        font-size: 2em;  
+    }  
+  
+    .features, .faq, .setup {  
+        display: grid;  
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  
+        gap: 25px;  
+        margin-top: 30px;  
+    }  
+  
+    .feature, .faq-item, .step {  
+        background: white;  
+        padding: 20px;  
+        border-radius: 14px;  
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);  
+        transition: transform 0.3s ease, box-shadow 0.3s ease;  
+        opacity: 0;  
+        transform: translateY(30px);  
+        animation: fadeInUp 1s forwards;  
+    }  
+  
+
+  
+        .feature i, .step i {  
+            font-size: 2em;  
+            color: #2e8b57;  
+            margin-bottom: 10px;  
+        }  
+  
+    @keyframes fadeInUp {  
+        to {  
+            opacity: 1;  
+            transform: translateY(0);  
+        }  
+    }  
+  
+    .download {  
+        text-align: center;  
+        margin-top: 60px; 
+		
+    }  
+	
+	
+	.indirbtn{
+		transform: translateY(30px);  
+        animation: fadeInUp 1s forwards;  
+	}
+	
+  
+        .download a {  
+            background: #2e8b57;  
+            color: white;  
+            padding: 15px 40px;  
+            border-radius: 30px;  
+            font-size: 1.2em;  
+            text-decoration: none;  
+            transition: background 0.3s ease;  
+        }  
+  
+            .download a:hover {  
+                background: #256f48;  
+            }  
+  
+    .screenshots {  
+        display: flex;  
+        flex-wrap: wrap;  
+        gap: 20px;  
+        justify-content: center;  
+        margin-top: 30px;  
+		transform: translateY(30px);  
+        animation: fadeInUp 1s forwards;  
+    }  
+  
+        .screenshots img {  
+            width: 100%;  
+            max-width: 300px;  
+            border-radius: 12px;  
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  
+            transition: transform 0.3s;  
+        }  
+  
+            .screenshots img:hover {  
+                transform: scale(1.05);  
+            }  
+  
+    footer {  
+        text-align: center;  
+        background: #eee;  
+        padding: 25px;  
+        font-size: 0.9em;  
+        color: #666;  
+        margin-top: 80px;  
+    }  
+  
+    /* Mobil için düzenleme */  
+    @media screen and (max-width: 768px) {  
+        .features, .faq, .setup {  
+            grid-template-columns: 1fr; /* Mobilde tek sütun */  
+        }  
+    }  
+  
+    /* Modal Arka Plan ve Kapalı Görünüm */  
+    .modal {  
+        display: none;  
+        position: fixed;  
+        z-index: 1;  
+        left: 0;  
+        top: 0;  
+        width: 100%;  
+        height: 100%;  
+        overflow: auto;  
+        background-color: rgba(0, 0, 0, 0.7);  
+        padding-top: 60px;  
+    }  
+  
+    /* Modal İçerik */  
+    .modal-content {  
+        background-color: #fefefe;  
+        margin: 5% auto;  
+        padding: 20px;  
+        border: 1px solid #888;  
+        width: 80%;  
+        max-width: 600px;  
+        border-radius: 10px;  
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  
+    }  
+  
+    /* Kapatma Düğmesi */  
+    .close {  
+        color: #aaa;  
+        float: right;  
+        font-size: 28px;  
+        font-weight: bold;  
+    }  
+  
+        .close:hover,  
+        .close:focus {  
+            color: black;  
+            text-decoration: none;  
+            cursor: pointer;  
+        }  
+  
+    /* Özellikler, FAQ ve adımlar için fare üzerine kayma efekti */  
+    .feature, .faq-item, .step {  
+        transition: transform 0.3s ease, box-shadow 0.3s ease;  
+    }  
+  
+
+  
+    /* Öne çıkan özellikler */  
+    .feature {  
+        background: white;  
+        padding: 20px;  
+        border-radius: 12px;  
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);  
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Kayma ve gölge geçişi */  
+        cursor: pointer; /* Tıklanabilir işaretçi */  
+        position: relative; /* Konumlama gerektiği için position ekliyoruz */  
+    }  
+  
+   
+  
+       /* Fare üzerine gelindiğinde yukarı kayma ve gölge efekti */  
+          .feature:hover, .faq-item:hover, .step:hover {  
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);  
+        }  
+		
+		
+		.cik{
+			transition: all 0.3s ease;
+		}
+		
+		.cik:hover{
+			transform: translateY(-10px);  
+		}
+  
+  
+  
+    /* Özellik detayları */  
+    .detail {  
+        display: none;  
+        background: #f5f7fa;  
+        padding: 15px;  
+        border-radius: 8px;  
+        margin-top: 10px;  
+        font-size: 1em;  
+        color: #555;  
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  
+    }  
+  
+    .feature.open .detail {  
+        display: block;  
+    }  
+  
+  
+  
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+    .image-gallery img {
+      max-width: 300px;
+      cursor: zoom-in;
+      margin: 10px;
+      transition: transform 0.3s;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 35px;
+      color: white;
+      cursor: pointer;
+      z-index: 10001;
+    }
+
+    .modal-close:hover {
+      color: red;
+    }
+
+    .image-container {
+      
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+
+    }
+
+    .image-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
+      transition: transform 0.05s;
+      user-select: none;
+      pointer-events: none;
+    }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+    </style>  </head>  
+<body>  
+
+  <header class="takbis-header">
+    <h1><i class="fas fa-map"></i> TAKBİS Plus</h1>
+    <a href="#indir" class="download-btn">
+      <i class="fas fa-download"></i> İndir
+    </a>
+  </header>
+
+<section>  
+ <section>  
+    <h2><i class="fas fa-star"></i> Öne Çıkan Özellikler</h2>  
+    <div class="features">  
+        <!-- Arka Plan Kurtarma -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-1')">  
+				<i class="fas fa-sync-alt"></i>  
+				<h3>Arka Plan Kurtarma</h3>  
+				<p>Takbis çöktüğünde işlemleri kurtarır, hiçbir şey kaybolmaz.</p>  
+			</div>  
+		</div>
+		
+
+        <!-- Zaman Kazandırır -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-2')">  
+				<i class="fas fa-clock"></i>  
+				<h3>Zaman Kazandırır</h3>  
+				<p>Rutin işlemleri kısaltarak iş gücünden tasarruf sağlar.</p>  
+			</div>  
+		</div> 
+        <!-- Kişiselleştirilebilir -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-3')">  
+				<i class="fas fa-cogs"></i>  
+				<h3>Kişiselleştirilebilir</h3>  
+				<p>Kendi iş akışınıza uygun olarak ayarlanabilir.</p>  
+			</div>  
+		</div> 
+        <!-- Akıllı Bildirimler -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-4')">  
+				<i class="fas fa-bell"></i>  
+				<h3>Akıllı Bildirimler</h3>  
+				<p>Güncellemeler, uyarılar ve öneriler ekranınızda.</p>  
+			</div>  
+		</div> 
+        <!-- Estetik Arayüz -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-5')">  
+				<i class="fas fa-magic"></i>  
+				<h3>Estetik Arayüz</h3>  
+				<p>Modern, sade ve kullanıcı dostu tasarım.</p>  
+			</div>  
+		</div> 
+        <!-- Güvenli ve Hızlı -->  
+		<div class="cik" >
+			<div class="feature" onclick="openModaldiv('modal-6')">  
+				<i class="fas fa-shield-alt"></i>  
+				<h3>Güvenli ve Hızlı</h3>  
+				<p>Hafif yapısıyla bilgisayarınızı yormaz, güvenli çalışır.</p>  
+			</div> 
+		 </div>  
+    </div>  
+</section>  
+
+<!-- Modal Yapısı -->  
+<div id="modal-1" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-1')">&times;</span>  
+        <h3>Arka Plan Kurtarma</h3>  
+        <p>Takbis Plus, herhangi bir yazılım hatasında tüm işlemlerinizi geri yükler. Arka planda veri kaybı yaşamadan, işlemlerinize kaldığınız yerden devam edebilirsiniz. Bu özellik, kullanıcı deneyimini güçlendirir ve kesintisiz çalışma sağlar.</p>  
+    </div>  
+</div>  
+
+<div id="modal-2" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-2')">&times;</span>  
+        <h3>Zaman Kazandırır</h3>  
+        <p>Takbis Plus, sık yapılan işlemleri otomatize eder ve süreci hızlandırır. Zaman kazandıran bu özellik, kullanıcıların daha verimli çalışmasına olanak tanır ve iş gücünden tasarruf sağlar.</p>  
+    </div>  
+</div>  
+
+<div id="modal-3" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-3')">&times;</span>  
+        <h3>Kişiselleştirilebilir</h3>  
+        <p>Takbis Plus, kişisel tercihlere göre özelleştirilebilir. Kullanıcılar, yazılımı kendi iş akışlarına uygun şekilde uyarlayarak daha verimli çalışabilirler. Rutin görevler, kullanıcıların tercihlerine göre hızlandırılabilir veya kolaylaştırılabilir.</p>  
+    </div>  
+</div>  
+
+<div id="modal-4" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-4')">&times;</span>  
+        <h3>Akıllı Bildirimler</h3>  
+        <p>Takbis Plus, kullanıcılara önemli bildirimler ve uyarılar gönderir. Yazılımda bir güncelleme veya kritik bir değişiklik olduğunda, kullanıcılar anında haberdar edilir. Bu bildirimler, iş akışlarını kesintiye uğratmadan, kullanıcıların işlerini düzenli bir şekilde sürdürmelerini sağlar.</p>  
+    </div>  
+</div>  
+
+<div id="modal-5" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-5')">&times;</span>  
+        <h3>Estetik Arayüz</h3>  
+        <p>Takbis Plus, sade ve modern bir tasarıma sahiptir. Kullanıcı dostu arayüzü sayesinde, yazılımı kullanmak oldukça basittir. Tüm özellikler, kullanıcıların kolayca erişebileceği şekilde düzenlenmiştir.</p>  
+    </div>  
+</div>  
+
+<div id="modal-6" class="modal">  
+    <div class="modal-content">  
+        <span class="close" onclick="closeModaldiv('modal-6')">&times;</span>  
+        <h3>Güvenli ve Hızlı</h3>  
+        <p>Takbis Plus, güvenli ve hızlı çalışmak üzere tasarlanmıştır. Hafif yapısı sayesinde bilgisayarınızın performansını etkilemez ve aynı zamanda güçlü güvenlik önlemleri ile verilerinizin korunmasını sağlar.</p>  
+    </div>  
+</div>  
+
+
+
+<br>
+<br>
+
+
+
+<h2><i class="fas fa-images"></i> Ekran Görüntüleri</h2>  
+
+    <!-- Ekran Görüntüleri -->
+    <div class="screenshots image-gallery">
+        <img src="src/img/1.png" alt="Ana Sayfa" onclick="openModal(this.src)" loading="lazy">
+        <img src="src/img/2.png" alt="Form Girişi" onclick="openModal(this.src)" loading="lazy">
+        <img src="src/img/3.png" alt="Bildirim Ekranı" onclick="openModal(this.src)" loading="lazy">
+    </div>
+
+
+   <div class="modal" id="modal">
+    <div class="modal-close" onclick="closeModal()">&times;</div>
+    <div class="image-container" id="imageContainer">
+      <img id="modalImg" src="" />
+    </div>
+  </div>
+
+
+
+<br>
+<br>
+<br>
+
+
+<h2><i class="fas fa-question-circle"></i> Sık Sorulan Sorular</h2>  
+<div class="faq">  
+    <div class="faq-item">  
+        <h4><i class="fas fa-coins"></i> Program ücretli mi?</h4>  
+        <p>Hayır, tamamen ücretsizdir.</p>  
+    </div>  
+    <div class="faq-item">  
+        <h4><i class="fas fa-user-shield"></i> Güvenli mi?</h4>  
+        <p>Sadece sizin bilgisayarınızda çalışır, dışa veri aktarmaz.</p>  
+    </div>  
+    <div class="faq-item">  
+        <h4><i class="fas fa-sync"></i> Nasıl güncellenir?</h4>  
+        <p>Program içindeki güncelleme kontrolü ile otomatik yapılabilir.</p>  
+    </div>  
+    <div class="faq-item">  
+        <h4><i class="fas fa-laptop-code"></i> Nerede çalışır?</h4>  
+        <p>Windows tabanlı tüm bilgisayarlarda çalışabilir.</p>  
+    </div>  
+</div>  
+
+
+
+<br>
+<br>
+<br>
+
+
+<h2 id="indir"><i class="fas fa-wrench"></i> Nasıl Kurulur?</h2>  
+<div class="setup">  
+    <div class="step">  
+        <i class="fas fa-download"></i>  
+        <h4>1. Programı İndir</h4>  
+        <p>Aşağıdaki buton ile en güncel versiyonu indir.</p>  
+    </div>  
+    <div class="step">  
+        <i class="fas fa-file-alt"></i>  
+        <h4>2. Kurulumu Başlat</h4>  
+        <p>İndirilen exe dosyasını çift tıklayıp kur.</p>  
+    </div>  
+    <div class="step">  
+        <i class="fas fa-check-circle"></i>  
+        <h4>3. Kullanım</h4>  
+        <p> Otomatik olarak Takbis ile entegre çalışır.</p>  
+    </div>  
+</div>  
+
+
+<div class="download"> 
+	<h2><i class="fas fa-download"></i> Takbis Plus'ı İndir</h2>  
+	<div class="indirbtn">  
+		<a href="TakbisPlus.exe" download target="_blank"><i class="fas fa-download"></i> Şimdi İndir</a>  
+	</div>  
+</div> 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</section>  
+
+<footer>  
+    &copy; 2025 Takbis Plus | Bu yazılım herhangi bir ticari amaç için geliştirilmemiştir. <br> Hata ve öneriler için: <a href="mailto:tkgmplus@gmail.com">tkgmplus@gmail.com</a> adresine mail yollayınız | Tüm Hakları Saklıdır  
+</footer>  
+
+
+
+<script>  
+    // Modal açma fonksiyonu  
+    function openModaldiv(modalId) {  
+        var modal = document.getElementById(modalId);  
+        modal.style.display = "block";  
+    }  
+
+    // Modal kapama fonksiyonu  
+    function closeModaldiv(modalId) {  
+        var modal = document.getElementById(modalId);  
+        modal.style.display = "none";  
+    }  
+
+    // Modal dışına tıklanınca kapama  
+    window.onclick = function (event) {  
+        if (event.target.classList.contains('modal')) {  
+            closeModaldiv(event.target.id);  
+        }  
+    }  
+	
+	
+
+
+
+
+
+ 
+ 
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const container = document.getElementById("imageContainer");
+
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    function openModal(src) {
+      modal.style.display = "block";
+      modalImg.src = src;
+      scale = 1;
+      offsetX = 0;
+      offsetY = 0;
+      updateTransform();
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    function updateTransform() {
+      modalImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    }
+
+    // Yakınlaştırma: fare pozisyonuna göre odakla
+    container.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      const rect = container.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const prevScale = scale;
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      scale = Math.min(Math.max(scale + delta, 0.5), 5);
+
+      // Pozisyonu fareye göre ayarla
+      offsetX -= (mouseX - offsetX) * (scale - prevScale) / prevScale;
+      offsetY -= (mouseY - offsetY) * (scale - prevScale) / prevScale;
+
+      updateTransform();
+    });
+
+    container.addEventListener("mousedown", function (e) {
+      if (e.button !== 0) return; // sadece sol tık
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      container.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mouseup", function () {
+      isDragging = false;
+      container.style.cursor = "grab";
+    });
+
+    document.addEventListener("mousemove", function (e) {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      startX = e.clientX;
+      startY = e.clientY;
+
+      offsetX += dx;
+      offsetY += dy;
+
+      updateTransform();
+    });
+
+</script>
+
+</body>  
+</html> 
