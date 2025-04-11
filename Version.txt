@@ -1,12 +1,6 @@
 25.75
-[Eski Özellikler]
-- Performans iyileştirildi.
-- Kullanıcı arayüzü güncellendi.
-- Performans iyileştirildi.
-- Kullanıcı arayüzü güncellendi.
 
 [Yeni Gelen Özellikler]
-- Güncelleme bildirim sistemi eklendi.
-- Otomatik kod güncelleme desteği.
-- Güncelleme bildirim sistemi eklendi.
-- Otomatik kod güncelleme desteği.
+
+- Hakımızda kısmı Eklendi.
+- Evrak Karanlık Ekran Sorunu için Çözüm Butonu Eklendi.
