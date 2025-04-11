@@ -1,23 +1,19 @@
 
 
-//								V.25.73
+//								V.25.74
 //###############################################################################################
 // ********************************* Karanlık Ekran Düzelt BAŞ **********************************
 //###############################################################################################
-
-
 
 function sayfayiDinle() {
     let observer = new MutationObserver(() => {
         let panel = document.getElementById("mainPreviewForm:onizlemePanel");
         let btn = document.getElementById("karanlik-duzelt-btn");
 
-        // Eğer ID varsa ve buton yoksa, butonu ekle
         if (panel && !btn) {
             karanlikDuzeltButonuEkle();
         }
 
-        // Eğer ID sayfadan kaybolursa butonu da kaldır
         if (!panel && btn) {
             btn.remove();
         }
@@ -25,7 +21,6 @@ function sayfayiDinle() {
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Sayfa açıldığında ilgili öğe zaten varsa butonu ekle
     if (document.getElementById("mainPreviewForm:onizlemePanel")) {
         karanlikDuzeltButonuEkle();
     }
@@ -34,7 +29,8 @@ function sayfayiDinle() {
 function karanlikDuzeltButonuEkle() {
     let btn = document.createElement("button");
     btn.id = "karanlik-duzelt-btn";
-    btn.innerHTML = "<span style='font-size: 25px; margin-bottom:4px;'>🌙</span>";// Başlangıçta sadece ikon görünsün
+    btn.type = "button"; // Sayfa yenilemesini önler
+    btn.innerHTML = "<span style='font-size: 25px; margin-bottom:4px;'>🌙</span>";
     btn.style = `
         width: 35px; height: 35px;
         background: rgba(224, 236, 252, 0);
@@ -46,10 +42,6 @@ function karanlikDuzeltButonuEkle() {
         display: flex; align-items: center; justify-content: center;
     `;
 
-
-    // background: linear-gradient(135deg, #007AFF, #005BBB);
-
-    // Hover efekti (buton genişliyor, yazı beliriyor)
     btn.onmouseover = function () {
         btn.style.width = "196px";
         btn.style.background= "linear-gradient(135deg, #007AFF, #005BBB)";
@@ -66,42 +58,31 @@ function karanlikDuzeltButonuEkle() {
     };
 
     btn.onclick = function () {
-        showNotification("🔄 Karanlık ekran sorunu çözülüyor...", "info");
+        const blob = new Blob(["Ctrl + F5 tetiklendi!"], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'KaranlikEkranCoz';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        showDownloadAlert();
+
         setTimeout(() => {
-
-    // Service Worker'ları temizle (Eğer varsa)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-            for (let registration of registrations) {
-                registration.unregister();
+            window.showAHKDiv = true;
+            if (window.showAHKDiv) {
+                createAHKAlertDiv();
             }
-        });
-    }
-
-    // Cache Storage'ı temizle
-    if ('caches' in window) {
-        caches.keys().then(names => {
-            for (let name of names) {
-                caches.delete(name);
-            }
-        });
-    }
-
-    // Sayfayı zorunlu olarak yenile (Gerçek Ctrl + F5 etkisi)
-    window.location.replace(window.location.pathname + "?nocache=" + new Date().getTime());
-
-
-        }, 1500);
+        }, 5000);
     };
 
-    // 📌 İlk buton menüsünü bul ve en öne ekle (Body'ye eklemiyor!)
     let firstMenuButton = document.querySelector(".buttonMenuContainerDefault");
     if (firstMenuButton) {
         firstMenuButton.parentNode.insertBefore(btn, firstMenuButton);
     }
 }
 
-// 📌 Bildirim Sistemi
 function showNotification(message, type = "success") {
     let notification = document.createElement("div");
     notification.innerText = message;
@@ -121,9 +102,124 @@ function showNotification(message, type = "success") {
     }, 3000);
 }
 
-// **Sayfa yüklenince butonu kontrol et ve ekle**
-sayfayiDinle();
+function showDownloadAlert() {
+    const downloadAlert = document.createElement('div');
+    downloadAlert.style.position = 'fixed';
+    downloadAlert.style.top = '20px';
+    downloadAlert.style.left = '20px';
+    downloadAlert.style.background = 'linear-gradient(135deg, #2a2a2a, #3a3a3a)';
+    downloadAlert.style.color = '#fff';
+    downloadAlert.style.padding = '15px 25px';
+    downloadAlert.style.borderRadius = '16px';
+    downloadAlert.style.boxShadow = '0 6px 25px rgba(0,0,0,0.6)';
+    downloadAlert.style.zIndex = '10000';
+    downloadAlert.style.fontFamily = 'Times New Roman, sans-serif';
+    downloadAlert.style.fontSize = '15px';
+    downloadAlert.style.maxWidth = '320px';
+    downloadAlert.style.display = 'flex';
+    downloadAlert.style.alignItems = 'flex-start';
+    downloadAlert.style.gap = '12px';
+    downloadAlert.style.opacity = '0';
+    downloadAlert.style.transition = 'opacity 0.5s ease-in-out';
 
+    downloadAlert.innerHTML = `
+        <div style="font-size: 20px; line-height: 1;">📥</div>
+        <div>
+            <div style="font-weight: 600;">TAKBİS Plus'a Bağlanıyor</div>
+            <br>
+            <div style="opacity: 0.85; color:yellow; ">Sayfadan Ayrılmayınız !</div>
+            <br>
+        </div>
+        <button style="margin-left:auto;background:none;border:none;color:white;font-size:16px;cursor:pointer;" id="closeDownloadAlert">✖</button>
+    `;
+
+    document.body.appendChild(downloadAlert);
+
+    requestAnimationFrame(() => {
+        downloadAlert.style.opacity = '1';
+    });
+
+    document.getElementById('closeDownloadAlert').addEventListener('click', () => {
+        downloadAlert.style.opacity = '0';
+        setTimeout(() => {
+            downloadAlert.remove();
+        }, 300);
+    });
+
+    setTimeout(() => {
+        downloadAlert.style.opacity = '0';
+        setTimeout(() => {
+            if (downloadAlert.parentNode) downloadAlert.remove();
+        }, 300);
+    }, 5000);
+}
+
+function createAHKAlertDiv() {
+    const overlay = document.createElement('div');
+    overlay.id = 'ahkBlurOverlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.backdropFilter = 'blur(5px)';
+    overlay.style.zIndex = '9998';
+    document.body.appendChild(overlay);
+
+    const alertDiv = document.createElement('div');
+    alertDiv.style.position = 'fixed';
+    alertDiv.style.top = '50%';
+    alertDiv.style.left = '50%';
+    alertDiv.style.transform = 'translate(-50%, -50%)';
+    alertDiv.style.backgroundColor = '#333';
+    alertDiv.style.color = '#fff';
+    alertDiv.style.padding = '20px';
+    alertDiv.style.borderRadius = '12px';
+    alertDiv.style.boxShadow = '0 4px 20px rgba(0,0,0,0.6)';
+    alertDiv.style.zIndex = '9999';
+    alertDiv.style.textAlign = 'center';
+    alertDiv.style.fontFamily = 'Times New Roman, sans-serif';
+    alertDiv.style.maxWidth = '400px';
+    alertDiv.style.fontSize = '16px';
+    alertDiv.innerHTML = `
+        <h1 style="font-weight:bold; color:#eb236b; font-size:20px; "> İŞLEM BAŞARISIZ !</h1>
+        <hr>
+        <br>
+        <p>İşlem gerçekleşirken sayfadan ayrıldınız veya TAKBİS Plus yüklü değil. </p>
+        <br>
+        <p>TAKBİS Plus, Takbis'te çeşitli görevleri otomatikleştirilmesi, ve sorunların giderilmesine yardımcı olan bir yazılımdır.</p>
+        <br>
+        <p><strong>Yüklemek ister misiniz?</strong></p>
+        <br>
+        <button id="loadAHK" type="button" style="padding: 10px 30px; background-color: #007BFF; color: white; border: none; border-radius: 10px; cursor: pointer; margin: 5px;">
+            Yükle
+        </button>
+        <button id="cancelAHK" type="button" style="padding: 10px 30px; background-color: #f44336; color: white; border: none; border-radius: 10px; cursor: pointer; margin: 5px;">
+            Vazgeç
+        </button>
+    `;
+    document.body.appendChild(alertDiv);
+
+    const closeAlert = () => {
+        alertDiv.style.display = 'none';
+        overlay.remove();
+    };
+
+    document.getElementById('loadAHK').addEventListener('click', () => {
+        window.open('https://tkgmplus.github.io/TAKBIS//', '_blank');
+        closeAlert();
+        location.reload();// Sayfayı yenile
+    });
+
+    document.getElementById('cancelAHK').addEventListener('click', () => {
+        closeAlert();
+        location.reload();// Sayfayı yenile
+    });
+}
+
+// Sayfa yüklendiğinde dinlemeyi başlat
+sayfayiDinle();
 
 //###############################################################################################
 // ********************************** Karanlık Ekran Düzelt SON**********************************
@@ -507,6 +603,7 @@ addButton("E-İmza PIN Değiştir", "e_imza", e_imza);
 addButton("KEP Parola Değiştir", "kep_parola", kep_parola);
 addButton("KEP Şifre Değiştir", "kep_sifre", kep_sifre);
 
+
 let updateAllBtn = document.createElement("button");
 updateAllBtn.innerText = "🔒 Tüm Şifreleri Güncelle";
 updateAllBtn.style = `
@@ -564,9 +661,23 @@ updateCheckBtn.onclick = function() {
     checkForUpdate(true); // Güncelleme kontrol fonksiyonunu çalıştır
 };
 
+
+    let hakkimizda = document.createElement("button");
+hakkimizda.innerText = " Hakkımızda";
+hakkimizda.style = `
+    display: block; padding: 7px; width: 90%;
+    margin: 5px auto; border: none; cursor: pointer;
+    border-radius: 5px; background: #f3690e; color: white;
+`;
+
+hakkimizda.onclick = function() {
+   window.open('https://tkgmplus.github.io/TAKBIS//', '_blank');
+};
+
+
 // 📌 Sticky menüye butonu ekle
 menuContainer.appendChild(updateCheckBtn);
-
+menuContainer.appendChild(hakkimizda);
 
 menuContainer.appendChild(updateAllBtn);
 document.body.appendChild(menuContainer);
@@ -706,13 +817,3 @@ document.body.appendChild(toggleButton);
 //###############################################################################################
 // ************************ Otomatik Giriş - KEP Giriş - E-İmza SON *****************************
 //###############################################################################################
-
-
-
-
-
-
-
-
-
-
