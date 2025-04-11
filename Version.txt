@@ -1,4 +1,4 @@
-25.74
+25.75
 [Eski Özellikler]
 - Performans iyileştirildi.
 - Kullanıcı arayüzü güncellendi.
