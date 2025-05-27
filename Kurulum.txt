@@ -19,7 +19,7 @@
 
     // 📌 Güncelleme dosyalarının URL'leri
     const VERSION_URL = "https://raw.githubusercontent.com/tkgmplus/EBYS/main/Version.txt"; // Versiyon ve ve özelikler çekiliyor
-    const SCRIPT_URL = "https://raw.githubusercontent.com/tkgmplus/EBYS/main/EBYS_Plus_Guncelleme.txt"; // Guncell Dosya indiriliyor
+    const SCRIPT_URL = "https://raw.githubusercontent.com/tkgmplus/EBYS/main/EBYS_Plus.txt"; // Guncell Dosya indiriliyor
 
     // 📌 Son güncelleme kontrol zamanı ve kayıtlı sürümü al
     let lastCheck = GM_getValue("lastCheck", 0);
